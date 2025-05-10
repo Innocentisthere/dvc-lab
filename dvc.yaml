@@ -1,0 +1,32 @@
+stages:
+  featurize:
+    cmd: python src/featurization.py
+    deps:
+    - data/insurance.csv
+    - src/featurization.py
+    outs:
+    - data/features
+  scale_split:
+    cmd: python src/scale_split.py
+    deps:
+    - data/features/insurance_featurized.csv
+    - src/scale_split.py
+    params:
+    - scale_split.random_state
+    - scale_split.test_size
+    outs:
+    - data/split
+  train_n_evaluate:
+    cmd: python src/train_n_split.py
+    deps:
+    - data/split/test.csv
+    - data/split/train.csv
+    - src/train_n_evaluate
+    params:
+    - train.ccp_alpha
+    - train.cv
+    - train.max_depth
+    - train.min_sample_leaf
+    - train.min_sample_split
+    - train.n_estimators
+    - train.random_state
