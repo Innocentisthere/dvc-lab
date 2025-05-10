@@ -4,6 +4,8 @@ stages:
     deps:
     - data/insurance.csv
     - src/featurization.py
+    outs:
+      - data/features/insurance_featurized.csv
   scale_split:
     cmd: python src/scale_split.py
     deps:
@@ -12,6 +14,9 @@ stages:
     params:
     - scale_split.random_state
     - scale_split.test_size
+    outs:
+      - data/split/train.csv
+      - data/split/test.csv
   train_n_evaluate:
     cmd: python src/train_n_evaluate.py
     deps:
@@ -26,3 +31,5 @@ stages:
     - train.min_samples_split
     - train.n_estimators
     - train.random_state
+    outs:
+      - rand_forest_insurance.pkl
