@@ -1,0 +1,70 @@
+schema: '2.0'
+stages:
+  featurize:
+    cmd: python src/featurization.py
+    deps:
+    - path: data/insurance.csv
+      hash: md5
+      md5: d5364d06246fb4bfa4cc7d1ee89ebd0d
+      size: 55628
+    - path: src/featurization.py
+      hash: md5
+      md5: 4e6d780263be64c92289f1e26f3753e0
+      size: 1086
+  scale_split:
+    cmd: python src/scale_split.py
+    deps:
+    - path: data/features/insurance_featurized.csv
+      hash: md5
+      md5: e78b856a36d1bc1f0a5926540742fa4b
+      size: 70327
+    - path: src/scale_split.py
+      hash: md5
+      md5: f02c20aebd4b263e4d18e1ce21c18c82
+      size: 1242
+    params:
+      params.yaml:
+        scale_split.random_state: 42
+        scale_split.test_size: 0.3
+  train_n_evaluate:
+    cmd: python src/train_n_evaluate.py
+    deps:
+    - path: data/split/test.csv
+      hash: md5
+      md5: 18105bbed3608f6d7d031dd787efc23d
+      size: 92228
+    - path: data/split/train.csv
+      hash: md5
+      md5: d0f33db64bdec79a159f6eb8e0069451
+      size: 214725
+    - path: src/train_n_evaluate.py
+      hash: md5
+      md5: f84191eb1763e9a16478ca5958c3bbd0
+      size: 2164
+    params:
+      params.yaml:
+        train.ccp_alpha:
+        - 0.0001
+        - 0.001
+        - 0.01
+        - 0.05
+        - 0.5
+        train.cv: 4
+        train.max_depth:
+        - 5
+        - 10
+        - 15
+        train.min_samples_leaf:
+        - 1
+        - 2
+        - 4
+        train.min_samples_split:
+        - 2
+        - 5
+        - 10
+        train.n_estimators:
+        - 50
+        - 100
+        - 150
+        - 800
+        train.random_state: 42
